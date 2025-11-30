@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminMiddleware::class,
             'mahasiswa' => MahasiswaMiddleware::class,
             'pegawai' => PegawaiMiddleware::class,
+            'check.denda' => \App\Http\Middleware\CheckBlockingDenda::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -224,6 +224,15 @@ class BookController extends Controller
             abort(403, 'Hanya mahasiswa yang dapat meminjam buku.');
         }
 
+         // ✅ VALIDASI 1: Cek apakah user punya denda tertunggak yang memblokir
+        if (Loan::userHasBlockingDenda(auth()->id())) {
+            $totalDenda = Loan::getTotalDendaTertunggak(auth()->id());
+            return redirect()->back()->with('error', 
+                'Anda memiliki denda tertunggak sebesar Rp ' . number_format($totalDenda, 0, ',', '.') . 
+                '. Silakan lunasi denda terlebih dahulu untuk meminjam buku baru.');
+        }
+
+
         // Validation - cek ketersediaan buku
         if (!$book->isAvailable()) {
             return redirect()->back()->with('error', 'Buku tidak tersedia untuk dipinjam.');

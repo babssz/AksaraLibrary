@@ -17,26 +17,35 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:mahasiswa,pegawai',
-            'nim' => 'required_if:role,mahasiswa|nullable|string|max:20',
-            'phone' => 'required|string|max:15',
-            'address' => 'required|string|max:500',
-        ]);
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-            'nim' => $validated['nim'] ?? null,
-            'phone' => $validated['phone'],
-            'address' => $validated['address'],
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => [
+            'required',
+            'string',
+            'email',
+            'max:255',
+            'unique:users',
+            'regex:/@aksara\.ac\.id$/i',  // ✅ GANTI DENGAN INI (sama seperti login)
+        ],
+        'password' => 'required|string|min:8|confirmed',
+        'nim' => 'required|string|max:20|unique:users',
+        'phone' => 'required|string|max:15',
+        'address' => 'required|string|max:500',
+    ], [
+        'email.regex' => 'Hanya email dengan domain @aksara.ac.id yang diperbolehkan untuk registrasi.',
+    ]);
 
-        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
-    }
+    User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'role' => 'mahasiswa',
+        'nim' => $validated['nim'],
+        'phone' => $validated['phone'],
+        'address' => $validated['address'],
+    ]);
+
+    return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login dengan akun Anda.');
+}
 }

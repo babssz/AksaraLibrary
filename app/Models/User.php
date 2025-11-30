@@ -1,80 +1,80 @@
 <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
+    use Illuminate\Foundation\Auth\User as Authenticatable;
+    use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
-    use HasFactory, Notifiable;
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'nim',
-        'nip',
-        'phone',
-        'address',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
+    class User extends Authenticatable
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+        use HasFactory, Notifiable;
+
+        protected $fillable = [
+            'name',
+            'email',
+            'password',
+            'role',
+            'nim',
+            'nip',
+            'phone',
+            'address',
         ];
-    }
 
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
+        protected $hidden = [
+            'password',
+            'remember_token',
+        ];
 
-    public function isMahasiswa(): bool
-    {
-        return $this->role === 'mahasiswa';
-    }
+        protected function casts(): array
+        {
+            return [
+                'email_verified_at' => 'datetime',
+                'password' => 'hashed',
+            ];
+        }
 
-    public function isPegawai(): bool
-    {
-        return $this->role === 'pegawai';
-    }
+        public function isAdmin(): bool
+        {
+            return $this->role === 'admin';
+        }
 
-    public function notifications()
-    {
-        return $this->hasMany(\App\Models\Notification::class, 'user_id');
-    }
-    
+        public function isMahasiswa(): bool
+        {
+            return $this->role === 'mahasiswa';
+        }
 
-    public function unreadNotifications()
-    {
-        return $this->notifications()->where('is_read', false);
-    }
+        public function isPegawai(): bool
+        {
+            return $this->role === 'pegawai';
+        }
 
-    // TAMBAHKAN RELASI UNTUK LOAN:
-    
-    /**
-     * Relasi peminjaman buku
-     */
-    public function loans()
-    {
-        return $this->hasMany(Loan::class);
-    }
+        public function notifications()
+        {
+            return $this->hasMany(\App\Models\Notification::class, 'user_id');
+        }
+        
 
-    /**
-     * Relasi reviews/ulasan
-     */
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
+        public function unreadNotifications()
+        {
+            return $this->notifications()->where('is_read', false);
+        }
+
+        // TAMBAHKAN RELASI UNTUK LOAN:
+        
+        /**
+         * Relasi peminjaman buku
+         */
+        public function loans()
+        {
+            return $this->hasMany(Loan::class);
+        }
+
+        /**
+         * Relasi reviews/ulasan
+         */
+        public function reviews()
+        {
+            return $this->hasMany(Review::class);
+        }
     }
-}

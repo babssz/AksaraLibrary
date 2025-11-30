@@ -13,10 +13,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#4B352A',
-                        secondary: '#CA7842', 
-                        accent: '#B2CD9C',
-                        background: '#F0F2BD',
+                            primary: '#1B3C53',      // Navy Blue - warna utama
+                            secondary: '#234C6A',    // Medium Blue - warna sekunder
+                            accent: '#456882',       // Light Blue - aksen
+                            background: '#E3E3E3',   // Light Gray background
+                            danger: '#DC2626',       // Red
+                            success: '#16A34A',      // Green
+                            warning: '#F59E0B',      // Orange
+                            info: '#3B82F6',         
                     }
                 }
             }

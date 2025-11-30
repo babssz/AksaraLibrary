@@ -70,10 +70,10 @@
                     </td>
                     
                     <td class="px-3 py-3 whitespace-nowrap">
-                        <div class="text-sm {{ $loan->isLate() ? 'text-red-600 font-semibold' : 'text-gray-900' }}">
+                        <div class="text-sm {{ $loan->is_late ? 'text-red-600 font-semibold' : 'text-gray-900' }}">
                             {{ $loan->tanggal_jatuh_tempo->format('d/m/Y') }}
-                            @if($loan->isLate())
-                                <div class="text-xs text-red-500">(+{{ $loan->daysLate() }}hr)</div>
+                            @if($loan->is_late)
+                                <div class="text-xs text-red-500">(+{{ $loan->days_late }}hr)</div>
                             @endif
                         </div>
                     </td>

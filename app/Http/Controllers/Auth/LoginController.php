@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use app\Models\User;
+use App\Models\User; // ✅ PERBAIKI: huruf besar 'A' di App
 
 class LoginController extends Controller
 {
@@ -19,8 +19,14 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email' => [
+                'required', 
+                'email',
+                'regex:/@aksara\.ac\.id$/i' // ✅ VALIDASI DOMAIN AKSAYA
+            ],
             'password' => 'required',
+        ], [
+            'email.regex' => 'Hanya email dengan domain @aksara.ac.id yang diperbolehkan untuk login.', // ✅ PESAN ERROR CUSTOM
         ]);
 
         if (Auth::attempt($credentials)) {

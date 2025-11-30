@@ -13,7 +13,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
-        <!-- Tailwind dengan Color Palette Kamu -->
+        <!-- Tailwind dengan Color Palette Merah Energik -->
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script>
@@ -21,14 +21,14 @@
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#4B352A',
-                            secondary: '#CA7842', 
-                            accent: '#B2CD9C',
-                            background: '#F0F2BD',
-                            danger: '#e3342f',
-                            success: '#38c172',
-                            warning: '#ffed4a',
-                            info: '#6cb2eb',
+                            primary: '#1B3C53',      // Navy Blue - warna utama
+                            secondary: '#234C6A',    // Medium Blue - warna sekunder
+                            accent: '#456882',       // Light Blue - aksen
+                            background: '#E3E3E3',   // Light Gray background
+                            danger: '#DC2626',       // Red
+                            success: '#16A34A',      // Green
+                            warning: '#F59E0B',      // Orange
+                            info: '#3B82F6',         // Blue
                         }
                     }
                 }
@@ -42,6 +42,60 @@
         </style>
     </head>
     <body class="bg-background min-h-screen font-sans text-gray-900 antialiased">
+        <!-- Header -->
+    <header class="bg-primary text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white text-primary px-3 py-2 rounded-lg font-bold text-lg shadow-md">
+                        UA
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">UNIVERSITAS AKSARA</h1>
+                        <p class="text-accent text-sm">PERPUSTAKAAN DAN ARSIP</p>
+                    </div>
+                </div>
+                
+                @auth
+                <div class="flex items-center space-x-4">
+                    <span class="text-yellow-400 font-semibold">Halo, {{ auth()->user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="bg-accent text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-semibold shadow-md">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </form>
+                </div>
+                @else
+                <div class="space-x-2">
+                    <a href="{{ route('login') }}" class="bg-accent text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-semibold inline-block shadow-md">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                    <a href="{{ route('register') }}" class="bg-secondary text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-semibold inline-block shadow-md">
+                        <i class="fas fa-user-plus mr-2"></i>Register
+                    </a>
+                </div>
+                @endauth
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-secondary text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8 py-3">
+                <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('/') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('books*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                    <i class="fas fa-book"></i>
+                    <span>Koleksi Buku</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
         <div class="min-h-screen bg-background">
             <!-- Page Heading -->
             @if (isset($header))
@@ -60,5 +114,114 @@
 
         <!-- AlpineJS untuk dropdown -->
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+        <!-- Footer -->
+<footer class="bg-primary text-white">
+    <div class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <!-- About -->
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-white text-primary px-3 py-2 rounded-lg font-bold text-lg shadow-md">
+                        UA
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">UNIVERSITAS AKSARA</h3>
+                        <p class="text-yellow-400 text-xs font-semibold">Perpustakaan Digital</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-300 leading-relaxed">
+                    Portal perpustakaan digital Universitas Aksara yang menyediakan akses mudah ke koleksi buku dan layanan peminjaman online.
+                </p>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-yellow-400">Link Cepat</h4>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                            <i class="fas fa-chevron-right mr-2 text-xs"></i>Beranda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                            <i class="fas fa-chevron-right mr-2 text-xs"></i>Koleksi Buku
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('login') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                            <i class="fas fa-chevron-right mr-2 text-xs"></i>Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                            <i class="fas fa-chevron-right mr-2 text-xs"></i>Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-yellow-400">Kontak</h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-start">
+                        <i class="fas fa-map-marker-alt mt-1 mr-3 text-yellow-400"></i>
+                        <span class="text-white">Jl. Pendidikan No. 123<br>Makassar, Sulawesi Selatan</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone mt-1 mr-3 text-yellow-400"></i>
+                        <span class="text-white">(0411) 123-4567</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mt-1 mr-3 text-yellow-400"></i>
+                        <span class="text-white">perpustakaan@aksara.ac.id</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Operating Hours -->
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-yellow-400">Jam Operasional</h4>
+                <ul class="space-y-2 text-sm text-white">
+                    <li class="flex justify-between">
+                        <span>Senin - Jumat</span>
+                        <span class="font-semibold">08:00 - 17:00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>Sabtu</span>
+                        <span class="font-semibold">08:00 - 14:00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>Minggu</span>
+                        <span class="font-semibold text-yellow-400">Tutup</span>
+                    </li>
+                </ul>
+                <div class="mt-4">
+                    <h5 class="font-semibold mb-2 text-yellow-400">Ikuti Kami</h5>
+                    <div class="flex space-x-3">
+                        <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Footer -->
+        <div class="border-t border-white border-opacity-20 pt-6 text-center text-sm">
+            <p class="text-white">&copy; {{ date('Y') }} Perpustakaan Universitas Aksara. All Rights Reserved.</p>
+            <p class="text-gray-300 mt-1">Developed with <i class="fas fa-heart text-yellow-400"></i> by Tim IT Universitas Aksara</p>
+        </div>
+    </div>
+</footer>
+
     </body>
 </html>

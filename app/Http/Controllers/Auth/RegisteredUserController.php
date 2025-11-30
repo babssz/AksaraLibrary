@@ -14,37 +14,44 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+public function store(Request $request): RedirectResponse
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => [
+            'required', 
+            'string', 
+            'lowercase', 
+            'email', 
+            'max:255', 
+            'unique:'.User::class,
+            'regex:/@aksara\.ac\.id$/i'  // ✅ TAMBAHKAN INI
+        ],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'nim' => ['required', 'string', 'max:20', 'unique:users'],
+        'phone' => ['required', 'string', 'max:15'],
+        'address' => ['required', 'string', 'max:500'],
+    ], [
+        'email.regex' => 'Hanya email dengan domain @aksara.ac.id yang diperbolehkan untuk registrasi.',  // ✅ PESAN ERROR
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => 'mahasiswa',
+        'nim' => $request->nim,
+        'phone' => $request->phone,
+        'address' => $request->address,
+    ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
-    }
+    return redirect()->route('login')->with('status', 'Registrasi berhasil! Silakan login.');
+}
 }

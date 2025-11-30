@@ -12,7 +12,7 @@ class Loan extends Model
     protected $fillable = [
         'user_id', 'book_id', 'tanggal_pinjam', 'tanggal_kembali',
         'tanggal_jatuh_tempo', 'status', 'denda', 'denda_lunas', 
-        'perpanjangan_ke', 'diproses_oleh' // ✅ TAMBAHKAN FIELD INI
+        'perpanjangan_keh', 'diproses_oleh'
     ];
 
     protected $casts = [
@@ -36,46 +36,136 @@ class Loan extends Model
         return $this->hasOne(Review::class);
     }
 
-    // ✅ TAMBAHKAN RELASI UNTUK PEGAWAI YANG MEMPROSES PENGEMBALIAN
     public function processedBy()
     {
         return $this->belongsTo(User::class, 'diproses_oleh');
     }
 
-    public function isLate()
+    /**
+     * CEK APAKAH LOAN TERLAMBAT
+     */
+    public function getIsLateAttribute()
     {
-        return now()->greaterThan($this->tanggal_jatuh_tempo) && $this->status === 'dipinjam';
+        return $this->status === 'dipinjam' && 
+               $this->tanggal_jatuh_tempo && 
+               now()->startOfDay()->gt($this->tanggal_jatuh_tempo);
     }
 
+    /**
+     * HITUNG DENDA BERDASARKAN KETERLAMBATAN (HARI BULAT)
+     */
     public function calculateDenda()
     {
-        if ($this->isLate()) {
-            $daysLate = now()->diffInDays($this->tanggal_jatuh_tempo);
-            return $daysLate * $this->book->denda_per_hari;
+        if ($this->is_late && $this->tanggal_jatuh_tempo) {
+            $daysLate = $this->days_late; // Pakai accessor days_late yang sudah dibulatkan
+            $dendaPerHari = $this->book->denda_per_hari ?? 5000;
+            return $daysLate * $dendaPerHari;
         }
         return 0;
     }
 
+    /**
+     * HARI KETERLAMBATAN (BULAT, TANPA KOMMA)
+     */
+    public function getDaysLateAttribute()
+    {
+        if ($this->is_late && $this->tanggal_jatuh_tempo) {
+            // Gunakan startOfDay() untuk menghitung hari bulat
+            return now()->startOfDay()->diffInDays($this->tanggal_jatuh_tempo->startOfDay());
+        }
+        return 0;
+    }
+
+    /**
+     * CEK APAKAH USER PUNYA DENDA TERTUNGGAK YANG MEMBLOKIR PEMINJAMAN
+     */
+/**
+ * CEK APAKAH USER PUNYA DENDA TERTUNGGAK YANG MEMBLOKIR PEMINJAMAN
+ */
+    public static function userHasBlockingDenda($userId)
+    {
+        $loans = self::where('user_id', $userId)
+            ->where('status', 'dipinjam')
+            ->where('tanggal_jatuh_tempo', '<', now()->startOfDay())
+            ->get();
+
+        $totalDenda = 0;
+        $hasBlocking = false;
+
+        foreach ($loans as $loan) {
+            $denda = $loan->calculateDenda();
+            $totalDenda += $denda;
+            
+            // Blokir jika terlambat lebih dari 7 hari
+            if ($loan->days_late > 7) {
+                $hasBlocking = true;
+                \Log::info("BLOKIR: User {$userId} terlambat {$loan->days_late} hari untuk buku {$loan->book->judul}");
+            }
+        }
+
+        // Blokir jika total denda > Rp 50.000
+        if ($totalDenda > 50000) {
+            $hasBlocking = true;
+            \Log::info("BLOKIR: User {$userId} total denda Rp {$totalDenda}");
+        }
+
+        return $hasBlocking;
+    }
+
+    /**
+     * TOTAL DENDA TERTUNGGAK USER
+     */
+    public static function getTotalDendaTertunggak($userId)
+    {
+        $loans = self::where('user_id', $userId)
+            ->where('status', 'dipinjam')
+            ->where('tanggal_jatuh_tempo', '<', now()->startOfDay())
+            ->get();
+
+        $total = 0;
+        foreach ($loans as $loan) {
+            $total += $loan->calculateDenda();
+        }
+        return $total;
+    }
+
+    /**
+     * JUMLAH BUKU YANG TERLAMBAT
+     */
+    public static function getJumlahBukuTerlambat($userId)
+    {
+        return self::where('user_id', $userId)
+            ->where('status', 'dipinjam')
+            ->where('tanggal_jatuh_tempo', '<', now()->startOfDay())
+            ->count();
+    }
+
+    /**
+     * CEK APAKAH BISA DIPERPANJANG
+     */
     public function canBeRenewed()
     {
-        return !$this->isLate() && $this->perpanjangan_ke < 2;
+        return !$this->is_late && $this->perpanjangan_ke < 2;
     }
 
-    // ✅ TAMBAHKAN METHOD UNTUK MENDAPATKAN JUMLAH HARI TELAT
-    public function daysLate()
-    {
-        if ($this->isLate()) {
-            return now()->diffInDays($this->tanggal_jatuh_tempo);
-        }
-        return 0;
-    }
-
-    // ✅ TAMBAHKAN METHOD UNTUK STATUS DENDA
+    /**
+     * STATUS DENDA
+     */
     public function getStatusDendaAttribute()
     {
         if ($this->denda > 0) {
             return $this->denda_lunas ? 'lunas' : 'tertunggak';
         }
         return 'tidak ada';
+    }
+
+    /**
+     * ACCESSOR UNTUK FORMATTED DUE DATE
+     */
+    public function getFormattedDueDateAttribute()
+    {
+        return $this->tanggal_jatuh_tempo 
+            ? $this->tanggal_jatuh_tempo->format('d M Y') 
+            : 'Belum ditentukan';
     }
 }

@@ -27,8 +27,25 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => [
+                'required', 
+                'string', 
+                'email',
+                'regex:/@aksara\.ac\.id$/i' // ✅ VALIDASI DOMAIN AKSAYA
+            ],
             'password' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.regex' => 'Hanya email dengan domain @aksara.ac.id yang diperbolehkan untuk login.', // ✅ PESAN ERROR CUSTOM
         ];
     }
 

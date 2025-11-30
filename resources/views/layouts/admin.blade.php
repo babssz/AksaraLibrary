@@ -13,13 +13,13 @@
             theme: {
                 extend: {
                     colors: {
-                            primary: '#1B3C53',      // Navy Blue - warna utama
-                            secondary: '#234C6A',    // Medium Blue - warna sekunder
-                            accent: '#456882',       // Light Blue - aksen
-                            background: '#E3E3E3',   // Light Gray background
-                            danger: '#DC2626',       // Red
-                            success: '#16A34A',      // Green
-                            warning: '#F59E0B',      // Orange
+                            primary: '#1B3C53',      
+                            secondary: '#234C6A',    
+                            accent: '#456882',       
+                            background: '#E3E3E3',  
+                            danger: '#DC2626',       
+                            success: '#16A34A',      
+                            warning: '#F59E0B',      
                             info: '#3B82F6',         
                     }
                 }
@@ -28,9 +28,7 @@
     </script>
 </head>
 <body class="bg-background min-h-screen">
-    <!-- Header -->
-    <!-- Header -->
-<header class="bg-primary text-white shadow-lg">
+<header class="bg-primary text-white shadow-lg sticky top-0 z-50">
     <div class="container mx-auto px-4 py-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -43,30 +41,28 @@
                 </div>
             </div>
             
-            <div class="flex items-center space-x-4">
-                <!-- User Dropdown untuk Admin -->
+
                 <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" class="flex items-center space-x-2 text-accent hover:text-white transition">
+                    <button @click="open = !open" class="flex items-center space-x-2 text-white hover:text-yellow-400 transition">
                         <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-shield text-primary text-sm"></i>
+                            <i class="fas fa-user-graduate text-white text-sm"></i>
                         </div>
                         <span>Admin: {{ auth()->user()->name }}</span>
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
 
                     <div x-show="open" @click.away="open = false" 
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-200">
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-200">
                         <div class="px-4 py-2 text-sm text-gray-700 border-b">
                             <div class="font-medium">{{ auth()->user()->name }}</div>
                             <div class="text-gray-500 text-xs">{{ auth()->user()->email }}</div>
                             <div class="text-gray-500 text-xs">Role: Admin</div>
                         </div>
-                        
-                        <!-- TAMBAHKAN MENU EDIT PROFILE -->
-                        <a href="{{ route('profile.edit') }}" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
-                            <i class="fas fa-edit text-primary text-sm"></i>
-                            <span>Edit Profile</span>
-                        </a>
+
+                            <a href="{{ route('profile.edit') }}" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-edit text-primary text-sm"></i>
+                                <span>Edit Profile</span>
+                            </a>
                         
                         <div class="border-t my-1"></div>
                         <form method="POST" action="{{ route('logout') }}">
@@ -81,75 +77,143 @@
             </div>
         </div>
     </div>
+    <nav class="bg-secondary text-white shadow-md">
+    <div class="container mx-auto px-4">
+        <div class="flex space-x-8 py-3">
+            <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('/') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('books*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                <i class="fas fa-book"></i>
+                <span>Koleksi Buku</span>
+            </a>
+            <a href="{{ route('admin.dashboard') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('admin*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </div>
+    </nav>
 </header>
 
-    <!-- Navigation -->
-    <nav class="bg-secondary text-white shadow-md">
-        <div class="container mx-auto px-4">
-            <div class="flex space-x-8 py-3">
-                <a href="{{ url('/') }}" class="hover:text-accent transition flex items-center space-x-1">
-                    <i class="fas fa-home"></i>
-                    <span>Beranda</span>
-                </a>
-                <a href="{{ route('admin.dashboard') }}" class="hover:text-accent transition flex items-center space-x-1">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
+    <main>
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
             </div>
         @endif
-
+    
         @if(session('error'))
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
                 {{ session('error') }}
             </div>
         @endif
-
+    
         @yield('content')
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-primary text-white mt-12">
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    </main>
+   
+  
+
+    <footer class="bg-primary text-white">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">UNIVERSITAS AKSARA</h3>
-                    <p class="text-accent">Jl. Perpustakaan No. 123</p>
-                    <p class="text-accent">Kota Aksara, 12345</p>
-                    <p class="text-accent">Telp: (021) 123-4567</p>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-white text-primary px-3 py-2 rounded-lg font-bold text-lg shadow-md">
+                            UA
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-white">UNIVERSITAS AKSARA</h3>
+                            <p class="text-yellow-400 text-xs font-semibold">Perpustakaan Digital</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Portal perpustakaan digital Universitas Aksara yang menyediakan akses mudah ke koleksi buku dan layanan peminjaman online.
+                    </p>
                 </div>
+                
                 <div>
-                    <h4 class="font-bold mb-4">Admin Panel</h4>
-                    <ul class="space-y-2 text-accent">
-                        <li><a href="{{ route('admin.dashboard') }}" class="hover:text-white transition">Dashboard</a></li>
-                        <li><a href="{{ route('admin.users.index') }}" class="hover:text-white transition">Manajemen User</a></li>
-                        <li><a href="{{ route('books.index') }}" class="hover:text-white transition">Manajemen Buku</a></li>
+                    <h4 class="font-bold text-lg mb-4 text-yellow-400">Link Cepat</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>
+                            <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                                <i class="fas fa-chevron-right mr-2 text-xs"></i>Beranda
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                                <i class="fas fa-chevron-right mr-2 text-xs"></i>Koleksi Buku
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('login') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                                <i class="fas fa-chevron-right mr-2 text-xs"></i>Login
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('register') }}" class="hover:text-yellow-400 transition flex items-center text-white">
+                                <i class="fas fa-chevron-right mr-2 text-xs"></i>Register
+                            </a>
+                        </li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h4 class="font-bold mb-4">Sistem</h4>
-                    <ul class="space-y-2 text-accent">
-                        <li><a href="{{ route('loans.index') }}" class="hover:text-white transition">Peminjaman</a></li>
-                        <li><a href="{{ route('reviews.index') }}" class="hover:text-white transition">Review</a></li>
-                        <li><a href="{{ route('notifications.index') }}" class="hover:text-white transition">Notifikasi</a></li>
+                    <h4 class="font-bold text-lg mb-4 text-yellow-400">Kontak</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-yellow-400"></i>
+                            <span class="text-white">Jl. Pendidikan No. 123<br>Makassar, Sulawesi Selatan</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mt-1 mr-3 text-yellow-400"></i>
+                            <span class="text-white">(0411) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mt-1 mr-3 text-yellow-400"></i>
+                            <span class="text-white">perpustakaan@aksara.ac.id</span>
+                        </li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h4 class="font-bold mb-4">Support</h4>
-                    <p class="text-accent">Admin Helpdesk: admin@univ-aksara.ac.id</p>
-                    <p class="text-accent">Emergency: (021) 123-4567 ext. 123</p>
+                    <h4 class="font-bold text-lg mb-4 text-yellow-400">Jam Operasional</h4>
+                    <ul class="space-y-2 text-sm text-white">
+                        <li class="flex justify-between">
+                            <span>Senin - Jumat</span>
+                            <span class="font-semibold">08:00 - 17:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Sabtu</span>
+                            <span class="font-semibold">08:00 - 14:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Minggu</span>
+                            <span class="font-semibold text-yellow-400">Tutup</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4">
+                        <h5 class="font-semibold mb-2 text-yellow-400">Ikuti Kami</h5>
+                        <div class="flex space-x-3">
+                            <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="bg-white bg-opacity-10 hover:bg-yellow-400 hover:bg-opacity-100 hover:text-primary w-10 h-10 rounded-full flex items-center justify-center transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="border-t border-accent mt-8 pt-6 text-center text-accent">
-                <p>&copy; 2024 Perpustakaan Universitas Aksara - Admin Panel</p>
+            
+            <div class="border-t border-white border-opacity-20 pt-6 text-center text-sm">
+                <p class="text-white">&copy; {{ date('Y') }} Perpustakaan Universitas Aksara. All Rights Reserved.</p>
             </div>
         </div>
     </footer>

@@ -1,4 +1,3 @@
-<!-- resources/views/reviews/create.blade.php -->
 @extends(auth()->check() ? (auth()->user()->role === 'mahasiswa' ? 'layouts.mahasiswa' : (auth()->user()->role === 'pegawai' ? 'layouts.pegawai' : 'layouts.admin')) : 'layouts.app')
 
 @section('title', 'Beri Review')
@@ -8,7 +7,6 @@
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Beri Review untuk Buku</h1>
 
     <div class="bg-white rounded-lg shadow p-6">
-        <!-- Book Info -->
         <div class="mb-6 p-4 bg-gray-50 rounded-lg">
             <h3 class="font-semibold text-lg">{{ $loan->book->judul }}</h3>
             <p class="text-gray-600">by {{ $loan->book->penulis }}</p>
@@ -19,7 +17,6 @@
             @csrf
             <input type="hidden" name="loan_id" value="{{ $loan->id }}">
 
-            <!-- Rating -->
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
                 <div class="flex space-x-1" id="rating-stars">
@@ -36,7 +33,6 @@
                 @enderror
             </div>
 
-            <!-- Review Text -->
             <div class="mb-6">
                 <label for="ulasan" class="block text-sm font-medium text-gray-700 mb-2">
                     Ulasan (opsional)
@@ -49,7 +45,6 @@
                 @enderror
             </div>
 
-            <!-- Buttons -->
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('books.show', $loan->book_id) }}" 
                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition">
@@ -65,13 +60,11 @@
 </div>
 
 <script>
-    // Rating stars interaction
     document.querySelectorAll('.rating-star').forEach(star => {
         star.addEventListener('click', function() {
             const rating = this.dataset.rating;
             document.getElementById('rating-value').value = rating;
             
-            // Update stars appearance
             document.querySelectorAll('.rating-star').forEach(s => {
                 if (s.dataset.rating <= rating) {
                     s.classList.remove('text-gray-300');

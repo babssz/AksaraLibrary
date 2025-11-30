@@ -9,18 +9,6 @@
         <p class="text-gray-600">Kelola notifikasi sistem Anda</p>
     </div>
     
-    <!-- @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
-    
-    @if(session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {{ session('error') }}
-        </div>
-    @endif -->
-    
     <div class="mb-6 flex justify-between items-center">
         <div>
             <h2 class="text-xl font-semibold text-primary">Daftar Notifikasi</h2>
@@ -64,7 +52,6 @@
                                 <p class="text-sm text-gray-500">{{ $notification->created_at->diffForHumans() }}</p>
                             </div>
                             
-                            <!-- ✅ PERBAIKI: Tampilkan title dan message dari model -->
                             <h3 class="font-semibold text-gray-800 mb-1">{{ $notification->title }}</h3>
                             <p class="text-gray-600">{{ $notification->message }}</p>
                             
@@ -106,7 +93,6 @@
                 @endforeach
             </div>
             
-            <!-- Pagination -->
             @if($notifications->hasPages())
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
                 {{ $notifications->links() }}

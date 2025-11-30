@@ -7,10 +7,8 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
-        <!-- Book Details Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="md:flex">
-                <!-- Book Cover -->
                 <div class="md:w-1/3 p-8">
                     @if($book->cover)
                     <img src="{{ Storage::url($book->cover) }}" alt="{{ $book->judul }}" 
@@ -22,7 +20,6 @@
                     @endif
                 </div>
                 
-                <!-- Book Details -->
                 <div class="md:w-2/3 p-8">
                     <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $book->judul }}</h1>
                     
@@ -74,12 +71,9 @@
                     </div>
                     @endif
     
-                    <!-- Action Buttons -->
-                    <!-- Action Buttons -->
                     <div class="flex space-x-4">
                         @auth
                             @if(auth()->user()->isMahasiswa() && $book->isAvailable())
-                            <!-- ✅ PERBAIKI: route('books.loan', $book) -->
                             <form action="{{ route('books.loan', $book) }}" method="POST">
                                 @csrf
                                 <button type="submit" 
@@ -115,7 +109,6 @@
             </div>
         </div>
     
-        <!-- Reviews Section -->
         <div class="mt-8 bg-white rounded-xl shadow-lg p-8">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Ulasan Pembaca</h2>

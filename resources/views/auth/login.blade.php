@@ -3,7 +3,6 @@
 @section('title', 'Login - Perpustakaan Universitas Aksara')
 
 @section('content')
-    <!-- Session Status -->
     @if (session('status'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm">
             {{ session('status') }}
@@ -13,7 +12,6 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-envelope mr-1"></i>{{ __('Email') }}
@@ -32,7 +30,6 @@
             @enderror
         </div>
 
-        <!-- Password -->
         <div class="mb-4">
             <label for="password" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-lock mr-1"></i>{{ __('Password') }}
@@ -49,7 +46,6 @@
             @enderror
         </div>
 
-        <!-- Remember Me -->
         <div class="flex items-center justify-between mb-6">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" 
@@ -67,13 +63,11 @@
             @endif
         </div>
 
-        <!-- Login Button -->
         <button type="submit" 
                 class="w-full bg-primary text-white px-4 py-3 rounded-md hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 font-semibold shadow-md">
             <i class="fas fa-sign-in-alt mr-2"></i>{{ __('Masuk') }}
         </button>
 
-        <!-- Register Link -->
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">
                 {{ __('Belum punya akun?') }}

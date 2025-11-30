@@ -13,10 +13,7 @@ class NotificationController extends Controller
     public function index()
     {
         try {
-
-        // ✅ GUNAKAN RELASI YANG SUDAH DIPERBAIKI
         $notifications = auth()->user()->notifications()->orderBy('created_at', 'desc')->paginate(10);
-        
         \Log::info('Notifications found: ' . $notifications->count());
         
         return view('notifications.index', compact('notifications'));
@@ -84,17 +81,14 @@ class NotificationController extends Controller
     // NotificationController.php
     public function systemLog()
     {
-        // ✅ AUTHORIZATION: Hanya pegawai dan admin yang bisa akses
         if (!auth()->user()->isPegawai() && !auth()->user()->isAdmin()) {
             abort(403, 'Hanya pegawai yang dapat mengakses log notifikasi sistem.');
         }
 
-        // ✅ AMBIL SEMUA NOTIFIKASI SISTEM (dari semua user)
         $notifications = Notification::with('user')
                             ->orderBy('created_at', 'desc')
                             ->paginate(20);
 
-        // ✅ STATISTIK NOTIFIKASI
         $stats = [
             'total' => Notification::count(),
             'today' => Notification::whereDate('created_at', today())->count(),

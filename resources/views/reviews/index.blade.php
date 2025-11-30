@@ -1,4 +1,3 @@
-<!-- resources/views/reviews/index.blade.php -->
 @extends(auth()->check() ? (auth()->user()->role === 'mahasiswa' ? 'layouts.mahasiswa' : (auth()->user()->role === 'pegawai' ? 'layouts.pegawai' : 'layouts.admin')) : 'layouts.app')
 
 @section('content')
@@ -6,7 +5,6 @@
     <h1 class="text-2xl font-bold text-gray-800">Semua Review Buku</h1>
 </div>
 
-<!-- ✅ PERBAIKI: Cek jika reviews kosong SEBELUM tabel -->
 @if(empty($reviews) || (is_object($reviews) && $reviews->isEmpty()))
 <div class="text-center py-12 bg-white rounded-lg shadow">
     <i class="fas fa-comment-slash text-4xl text-gray-300 mb-4"></i>

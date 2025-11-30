@@ -30,7 +30,7 @@ public function store(Request $request): RedirectResponse
             'email', 
             'max:255', 
             'unique:'.User::class,
-            'regex:/@aksara\.ac\.id$/i'  // ✅ TAMBAHKAN INI
+            'regex:/@aksara\.ac\.id$/i'  
         ],
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
         'nim' => ['required', 'string', 'max:20', 'unique:users'],

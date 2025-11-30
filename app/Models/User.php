@@ -60,19 +60,12 @@
             return $this->notifications()->where('is_read', false);
         }
 
-        // TAMBAHKAN RELASI UNTUK LOAN:
         
-        /**
-         * Relasi peminjaman buku
-         */
         public function loans()
         {
             return $this->hasMany(Loan::class);
         }
 
-        /**
-         * Relasi reviews/ulasan
-         */
         public function reviews()
         {
             return $this->hasMany(Review::class);

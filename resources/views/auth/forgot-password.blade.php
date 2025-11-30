@@ -8,7 +8,6 @@
         {{ __('Lupa password? Tidak masalah. Masukkan email Anda dan kami akan mengirimkan link reset password.') }}
     </div>
 
-    <!-- Session Status -->
     @if (session('status'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm">
             <i class="fas fa-check-circle mr-1"></i>{{ session('status') }}
@@ -18,7 +17,6 @@
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
 
-        <!-- Email Address -->
         <div class="mb-6">
             <label for="email" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-envelope mr-1"></i>{{ __('Email') }}
@@ -41,7 +39,6 @@
             <i class="fas fa-paper-plane mr-2"></i>{{ __('Kirim Link Reset Password') }}
         </button>
 
-        <!-- Back to Login Link -->
         <div class="mt-6 text-center">
             <a href="{{ route('login') }}" 
                class="text-secondary hover:text-primary text-sm font-semibold transition inline-flex items-center">

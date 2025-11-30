@@ -3,7 +3,6 @@
 @section('title', 'Register - Perpustakaan Universitas Aksara')
 
 @section('content')
-    <!-- Success Message -->
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded mb-4 text-sm">
             <i class="fas fa-check-circle mr-1"></i>{{ session('success') }}
@@ -13,7 +12,6 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
         <div class="mb-3">
             <label for="name" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-user mr-1"></i>{{ __('Nama Lengkap') }}
@@ -32,7 +30,6 @@
             @enderror
         </div>
 
-        <!-- Email Address -->
         <div class="mb-3">
             <label for="email" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-envelope mr-1"></i>{{ __('Email') }}
@@ -50,7 +47,6 @@
             @enderror
         </div>
 
-        <!-- NIM -->
         <div class="mb-3">
             <label for="nim" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-id-card mr-1"></i>{{ __('NIM') }}
@@ -68,7 +64,6 @@
             @enderror
         </div>
 
-        <!-- Phone -->
         <div class="mb-3">
             <label for="phone" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-phone mr-1"></i>{{ __('Telepon') }}
@@ -86,7 +81,6 @@
             @enderror
         </div>
 
-        <!-- Address -->
         <div class="mb-3">
             <label for="address" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-map-marker-alt mr-1"></i>{{ __('Alamat') }}
@@ -102,7 +96,6 @@
             @enderror
         </div>
 
-        <!-- Password -->
         <div class="mb-3">
             <label for="password" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-lock mr-1"></i>{{ __('Password') }}
@@ -119,7 +112,6 @@
             @enderror
         </div>
 
-        <!-- Confirm Password -->
         <div class="mb-4">
             <label for="password_confirmation" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-lock mr-1"></i>{{ __('Konfirmasi Password') }}

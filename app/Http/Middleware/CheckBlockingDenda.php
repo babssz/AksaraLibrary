@@ -30,7 +30,7 @@ class CheckBlockingDenda
         $blockedRoutes = [
             'books.borrow',
             'loans.store',
-            'books.show' // Untuk mencegah akses detail buku jika ingin meminjam
+            'books.show' 
         ];
 
         return $request->routeIs($blockedRoutes);

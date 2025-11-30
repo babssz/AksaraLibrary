@@ -17,14 +17,10 @@ class BookController extends Controller
     public function index()
     {
         try {
-            // Debug: Cek apakah ada buku di database
             $totalBooks = Book::count();
             \Log::info("Total books in database: " . $totalBooks);
-            
-            // Query books dengan search dan filter
             $query = Book::query();
             
-            // Search functionality
             if ($search = request('search')) {
                 $query->where(function($q) use ($search) {
                     $q->where('judul', 'like', '%'.$search.'%')
@@ -33,22 +29,17 @@ class BookController extends Controller
                 });
             }
             
-            // Filter kategori
             if ($kategori = request('kategori')) {
                 $query->where('kategori', $kategori);
             }
-            
-            // Get results
             $books = $query->get();
-            
-            // Debug info
+        
             \Log::info("Books retrieved: " . $books->count());
             
             return view('books.index', compact('books'));
             
         } catch (\Exception $e) {
             \Log::error('Error in books index: ' . $e->getMessage());
-            // Return empty collection jika error
             return view('books.index', ['books' => collect()]);
         }
     }
@@ -61,7 +52,6 @@ class BookController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validasi data
             $validated = $request->validate([
                 'judul' => 'required|string|max:255',
                 'penulis' => 'required|string|max:255',
@@ -76,29 +66,21 @@ class BookController extends Controller
                 'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ]);
 
-            // Handle cover upload
             if ($request->hasFile('cover')) {
                 $coverPath = $request->file('cover')->store('covers', 'public');
                 $validated['cover'] = $coverPath;
             }
 
-            // Tambahkan field default
-            $validated['rating'] = 0; // default rating
-            $validated['created_by'] = auth()->id(); // user yang membuat
-
-            // Simpan ke database
+            $validated['rating'] = 0;
+            $validated['created_by'] = auth()->id(); 
             $book = Book::create($validated);
 
             \Log::info('Book created with cover: ' . $book->cover);
-            // Redirect dengan success message
             return redirect()->route('books.index')
                             ->with('success', 'Buku "'.$book->judul.'" berhasil ditambahkan!');
 
         } catch (\Exception $e) {
-            // Log error
             \Log::error('Error creating book: ' . $e->getMessage());
-            
-            // Redirect back dengan error
             return redirect()->back()
                             ->with('error', 'Gagal menambahkan buku: ' . $e->getMessage())
                             ->withInput();
@@ -109,8 +91,6 @@ class BookController extends Controller
     {
         try {
             $book = Book::findOrFail($id);
-            
-            // ✅ TAMBAHKAN DATA REVIEWS
             $reviews = Review::where('book_id', $id)
                         ->with('user')
                         ->orderBy('created_at', 'desc')
@@ -155,9 +135,7 @@ class BookController extends Controller
                 'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ]);
 
-            // Handle cover upload jika ada file baru
             if ($request->hasFile('cover')) {
-                // Hapus cover lama jika ada
                 if ($book->cover && Storage::disk('public')->exists($book->cover)) {
                     Storage::disk('public')->delete($book->cover);
                 }
@@ -165,11 +143,9 @@ class BookController extends Controller
                 $coverPath = $request->file('cover')->store('covers', 'public');
                 $validated['cover'] = $coverPath;
             } else {
-                // Pertahankan cover lama jika tidak ada upload baru
                 $validated['cover'] = $book->cover;
             }
 
-            // Update buku
             $book->update($validated);
 
             return redirect()->route('books.index')
@@ -191,13 +167,11 @@ class BookController extends Controller
             
             \Log::info('Book to delete: ' . $bookTitle);
             
-            // Hapus cover file jika ada
             if ($book->cover && Storage::disk('public')->exists($book->cover)) {
                 Storage::disk('public')->delete($book->cover);
                 \Log::info('Cover file deleted: ' . $book->cover);
             }
             
-            // Hapus buku dari database
             $book->delete();
             \Log::info('Book successfully deleted from database');
             
@@ -211,20 +185,12 @@ class BookController extends Controller
         }
     }
 
-    /**
-     * Handle book loan process - METHOD YANG HARUS DIPERBAIKI
-     */
     public function loan(Book $book): RedirectResponse
     {
-
-
-    
-        // Authorization - hanya mahasiswa yang bisa pinjam
         if (!auth()->user()->isMahasiswa()) {
             abort(403, 'Hanya mahasiswa yang dapat meminjam buku.');
         }
 
-         // ✅ VALIDASI 1: Cek apakah user punya denda tertunggak yang memblokir
         if (Loan::userHasBlockingDenda(auth()->id())) {
             $totalDenda = Loan::getTotalDendaTertunggak(auth()->id());
             return redirect()->back()->with('error', 
@@ -232,13 +198,10 @@ class BookController extends Controller
                 '. Silakan lunasi denda terlebih dahulu untuk meminjam buku baru.');
         }
 
-
-        // Validation - cek ketersediaan buku
         if (!$book->isAvailable()) {
             return redirect()->back()->with('error', 'Buku tidak tersedia untuk dipinjam.');
         }
 
-        // Validation - cek apakah user sudah meminjam buku yang sama
         $existingLoan = Loan::where('user_id', auth()->id())
             ->where('book_id', $book->id)
             ->whereIn('status', ['dipinjam', 'diperpanjang'])
@@ -251,13 +214,12 @@ class BookController extends Controller
         // Process loan
         try {
             DB::transaction(function () use ($book) {
-                // ✅ PERBAIKI: Sesuaikan dengan nama kolom di Model Loan
                 Loan::create([
                     'user_id' => auth()->id(),
                     'book_id' => $book->id,
-                    'tanggal_pinjam' => now(), // ✅ GANTI: tanggal_pinjam
-                    'tanggal_kembali' => null, // ✅ Biarkan null dulu
-                    'tanggal_jatuh_tempo' => now()->addDays($book->max_peminjaman_hari ?? 7), // ✅ GANTI: tanggal_jatuh_tempo
+                    'tanggal_pinjam' => now(), 
+                    'tanggal_kembali' => null, 
+                    'tanggal_jatuh_tempo' => now()->addDays($book->max_peminjaman_hari ?? 7),
                     'status' => 'dipinjam',
                     'denda' => 0,
                     'denda_lunas' => false,
@@ -266,7 +228,6 @@ class BookController extends Controller
 
                 // Update book stock
                 $book->decrement('stok');
-
                 Notification::create([
                 'user_id' => auth()->id(),
                 'type' => 'peminjaman',

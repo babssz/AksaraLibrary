@@ -5,10 +5,7 @@
 @section('content')
 
 
-
-<!-- Main Content -->
 <div class="min-h-screen bg-gray-50">
-    <!-- Hero Section -->
     <section class="bg-primary text-white py-20 mb-12 shadow-lg">
         <div class="container mx-auto px-4">
             <div class="text-center">
@@ -94,11 +91,11 @@
                                  class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                         @else
                             <div class="w-full h-full bg-blue-50 flex items-center justify-center">
-                                <i class="fas fa-book text-primary text-5xl"></i>
+                                <i class="fas fa-book text-secondary text-5xl"></i>
                             </div>
                         @endif
-                        <div class="absolute top-3 right-3 bg-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
-                            <i class="fas fa-box text-primary mr-1"></i>{{ $book->stok }}
+                        <div class="absolute top-3 right-3 bg-accent text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
+                            ⭐ {{ number_format($book->reviews_avg_rating ?? 0, 1) }}
                         </div>
                     </div>
                     
@@ -106,7 +103,6 @@
                         <h4 class="font-bold text-primary text-lg mb-2 line-clamp-2 min-h-[3.5rem]">{{ $book->judul }}</h4>
                         <p class="text-gray-600 text-sm mb-3"><i class="fas fa-user-edit mr-1"></i>{{ $book->penulis }}</p>
                         
-                        @if($book->reviews_avg_rating)
                         <div class="flex items-center mb-4">
                             <div class="flex items-center space-x-1">
                                 @for($i = 1; $i <= 5; $i++)
@@ -115,12 +111,11 @@
                             </div>
                             <span class="text-sm text-gray-600 ml-2">({{ $book->reviews_count }})</span>
                         </div>
-                        @endif
                         
                         <div class="flex justify-between items-center">
-                            <span class="text-xs text-gray-500"><i class="fas fa-calendar mr-1"></i>{{ $book->tahun_terbit }}</span>
+                            <span class="text-xs text-gray-500"><i class="fas fa-box mr-1"></i>Stok: {{ $book->stok }}</span>
                             <a href="{{ route('books.show', $book) }}" 
-                               class="bg-secondary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition shadow-md">
+                               class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition shadow-md">
                                 <i class="fas fa-info-circle mr-1"></i>Detail
                             </a>
                         </div>
@@ -141,7 +136,7 @@
         <section class="mb-16">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="text-3xl font-bold text-primary flex items-center">
-                    <i class="fas fa-fire mr-3 text-orange-500"></i>Buku Populer
+                    Buku Populer
                 </h3>
                 <a href="{{ route('books.index') }}?sort=popular" class="text-secondary hover:text-primary font-semibold flex items-center group">
                     Lihat Semua <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
@@ -192,7 +187,7 @@
                             <span class="text-xs text-gray-500"><i class="fas fa-box mr-1"></i>Stok: {{ $book->stok }}</span>
                             <a href="{{ route('books.show', $book) }}" 
                                class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition shadow-md">
-                                <i class="fas fa-hand-holding mr-1"></i>Pinjam
+                                <i class="fas fa-info-circle mr-1"></i>Detail
                             </a>
                         </div>
                     </div>
@@ -215,7 +210,7 @@
                 @php
                     $totalBooks = \App\Models\Book::count();
                     $totalUsers = \App\Models\User::count();
-                    $totalLoans = \App\Models\Loan::where('status', 'active')->count();
+                    $totalLoans = \App\Models\Loan::where('status', 'dipinjam')->count();
                     $totalReviews = \App\Models\Review::count();
                 @endphp
                 

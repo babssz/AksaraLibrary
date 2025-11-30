@@ -9,7 +9,6 @@
         <p class="text-gray-600">Selamat datang, {{ auth()->user()->name }}! Akses koleksi dan layanan perpustakaan.</p>
     </div>
     
-    <!-- Status Denda & Peringatan -->
     @if($hasBlockingDenda || $totalDenda > 0)
     <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
         <div class="flex items-center justify-between">
@@ -63,9 +62,7 @@
     @endif
     
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Quick Actions & Status -->
         <div class="lg:col-span-1 space-y-6">
-            <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold text-primary mb-4">Akses Cepat</h3>
                 <div class="grid grid-cols-2 gap-4">
@@ -86,7 +83,6 @@
                 </div>
             </div>
     
-            <!-- Status Peminjaman Aktif -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold text-primary">Peminjaman Aktif</h3>
@@ -132,7 +128,6 @@
             </div>
         </div>
     
-        <!-- Rekomendasi Buku -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex justify-between items-center mb-6">
@@ -143,7 +138,6 @@
                     </a>
                 </div>
     
-                <!-- Buku Populer -->
                 <div class="mb-8">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">📊 Buku Populer</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -175,7 +169,6 @@
                     </div>
                 </div>
     
-                <!-- Buku Baru -->
                 <div>
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">🆕 Buku Baru</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

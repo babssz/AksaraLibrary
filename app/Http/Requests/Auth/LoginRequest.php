@@ -31,7 +31,7 @@ class LoginRequest extends FormRequest
                 'required', 
                 'string', 
                 'email',
-                'regex:/@aksara\.ac\.id$/i' // ✅ VALIDASI DOMAIN AKSAYA
+                'regex:/@aksara\.ac\.id$/i' 
             ],
             'password' => ['required', 'string'],
         ];

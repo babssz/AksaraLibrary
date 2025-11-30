@@ -14,7 +14,6 @@
             @csrf
             @method('PUT')
             
-            <!-- Session Messages -->
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -38,7 +37,6 @@
             @endif
     
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Left Column -->
                 <div class="space-y-6">
                     <div>
                         <label for="judul" class="block text-sm font-medium text-gray-700 mb-2">Judul Buku *</label>
@@ -91,7 +89,6 @@
                     </div>
                 </div>
     
-                <!-- Right Column -->
                 <div class="space-y-6">
                     <div>
                         <label for="isbn" class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
@@ -130,7 +127,6 @@
                     <div>
                         <label for="cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Buku</label>
                         
-                        <!-- Current Cover Preview -->
                         @if($book->cover)
                         <div class="mb-3">
                             <p class="text-sm text-gray-600 mb-2">Cover Saat Ini:</p>
@@ -155,7 +151,6 @@
                 </div>
             </div>
     
-            <!-- Description -->
             <div class="mt-6">
                 <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Buku</label>
                 <textarea name="deskripsi" id="deskripsi" rows="4" 
@@ -163,7 +158,6 @@
                           placeholder="Deskripsi singkat tentang buku...">{{ old('deskripsi', $book->deskripsi) }}</textarea>
             </div>
     
-            <!-- Buttons -->
             <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
                 <a href="{{ route('books.index') }}" 
                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg transition duration-150 flex items-center">

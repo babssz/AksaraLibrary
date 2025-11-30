@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $user = auth()->user();
         
         if ($user->isAdmin()) {
-            return $this->admin(); // Ini akan memanggil method admin() yang sudah kita buat
+            return $this->admin(); 
         } elseif ($user->isMahasiswa()) {
             return $this->mahasiswa();
         } else {
@@ -59,7 +59,7 @@ class DashboardController extends Controller
             ->get();
 
         // Perlu Tindakan
-        $pendingActions = $overdueLoans; // Bisa ditambah dengan fitur lain nanti
+        $pendingActions = $overdueLoans; 
 
         return view('admin.users.dashboard', compact(
             'totalUsers',
@@ -104,7 +104,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // ✅ DATA DENDA TERTUNGGAK YANG MEMBLOKIR
         $totalDenda = 0;
         $jumlahBukuTerlambat = 0;
         $hasBlockingDenda = false;
@@ -115,15 +114,13 @@ class DashboardController extends Controller
                 $denda = $loan->calculateDenda();
                 $totalDenda += $denda;
                 
-                // Jika terlambat lebih dari 7 hari, blokir peminjaman
                 if ($loan->tanggal_jatuh_tempo && $loan->tanggal_jatuh_tempo->diffInDays(now()) > 7) {
                     $hasBlockingDenda = true;
                 }
             }
         }
 
-        // Atau jika ada denda lebih dari threshold tertentu
-        if ($totalDenda > 50000) { // Threshold Rp 50.000
+        if ($totalDenda > 50000) {
             $hasBlockingDenda = true;
         }
 
@@ -142,15 +139,11 @@ class DashboardController extends Controller
         return view('pegawai.dashboard');
     }
 
-    /**
- * Tampilkan semua aktivitas untuk admin
- */
     public function allActivities(): View
     {
-        // Aktivitas terbaru semua user
         $recentActivities = Loan::with(['user', 'book'])
             ->latest()
-            ->paginate(20); // 20 item per halaman
+            ->paginate(20); 
 
         return view('admin.users.activities', compact('recentActivities'));
     }

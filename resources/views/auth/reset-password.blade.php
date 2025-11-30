@@ -6,10 +6,8 @@
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
-        <!-- Password Reset Token -->
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-        <!-- Email Address -->
         <div class="mb-3">
             <label for="email" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-envelope mr-1"></i>{{ __('Email') }}
@@ -28,7 +26,6 @@
             @enderror
         </div>
 
-        <!-- Password -->
         <div class="mb-3">
             <label for="password" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-lock mr-1"></i>{{ __('Password Baru') }}
@@ -45,7 +42,6 @@
             @enderror
         </div>
 
-        <!-- Confirm Password -->
         <div class="mb-6">
             <label for="password_confirmation" class="block text-sm font-medium text-primary mb-1">
                 <i class="fas fa-lock mr-1"></i>{{ __('Konfirmasi Password') }}

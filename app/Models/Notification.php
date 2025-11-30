@@ -18,13 +18,11 @@ class Notification extends Model
         'read_at' => 'datetime',
     ];
 
-    // Relationship dengan User
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Scope untuk notifikasi yang belum dibaca
     public function scopeUnread($query)
     {
         return $query->where('is_read', false);

@@ -77,17 +77,12 @@ class LoanController extends Controller
         return redirect()->back()->with('success', 'Peminjaman berhasil diperpanjang.');
     }
 
-    /**
-     * Handle book return process - HANYA UNTUK PEGAWAI
-     */
     public function returnBook(Loan $loan): RedirectResponse
     {
-        // ✅ AUTHORIZATION: Hanya pegawai atau admin yang bisa proses pengembalian
         if (!auth()->user()->isPegawai() && !auth()->user()->isAdmin()) {
             abort(403, 'Hanya pegawai atau admin yang dapat memproses pengembalian buku.');
         }
 
-        // Validasi: hanya loan yang statusnya 'dipinjam' yang bisa dikembalikan
         if ($loan->status !== 'dipinjam') {
             return redirect()->back()->with('error', 'Buku sudah dikembalikan sebelumnya.');
         }
@@ -95,8 +90,6 @@ class LoanController extends Controller
         try {
             DB::transaction(function () use ($loan) {
                 $denda = $loan->calculateDenda();
-                
-                // Update status loan
                 $loan->update([
                     'status' => 'dikembalikan',
                     'tanggal_kembali' => now(),
@@ -104,10 +97,7 @@ class LoanController extends Controller
                     'diproses_oleh' => auth()->id() // ✅ CATAT SIAPA YANG PROSES
                 ]);
 
-                // Tambah stok buku
                 $loan->book->increment('stok');
-
-                // ✅ NOTIFIKASI KE MAHASISWA
                 $message = $denda > 0 
                     ? "Buku \"{$loan->book->judul}\" telah berhasil dikembalikan. Denda: Rp " . number_format($denda, 0, ',', '.') . " (Harap lunasi di perpustakaan)"
                     : "Buku \"{$loan->book->judul}\" telah berhasil dikembalikan. Terima kasih!";

@@ -41,9 +41,7 @@ class Loan extends Model
         return $this->belongsTo(User::class, 'diproses_oleh');
     }
 
-    /**
-     * CEK APAKAH LOAN TERLAMBAT
-     */
+  
     public function getIsLateAttribute()
     {
         return $this->status === 'dipinjam' && 
@@ -51,9 +49,7 @@ class Loan extends Model
                now()->startOfDay()->gt($this->tanggal_jatuh_tempo);
     }
 
-    /**
-     * HITUNG DENDA BERDASARKAN KETERLAMBATAN (HARI BULAT)
-     */
+  
     public function calculateDenda()
     {
         if ($this->is_late && $this->tanggal_jatuh_tempo) {
@@ -64,9 +60,6 @@ class Loan extends Model
         return 0;
     }
 
-    /**
-     * HARI KETERLAMBATAN (BULAT, TANPA KOMMA)
-     */
     public function getDaysLateAttribute()
     {
         if ($this->is_late && $this->tanggal_jatuh_tempo) {
@@ -76,12 +69,7 @@ class Loan extends Model
         return 0;
     }
 
-    /**
-     * CEK APAKAH USER PUNYA DENDA TERTUNGGAK YANG MEMBLOKIR PEMINJAMAN
-     */
-/**
- * CEK APAKAH USER PUNYA DENDA TERTUNGGAK YANG MEMBLOKIR PEMINJAMAN
- */
+
     public static function userHasBlockingDenda($userId)
     {
         $loans = self::where('user_id', $userId)
@@ -96,14 +84,12 @@ class Loan extends Model
             $denda = $loan->calculateDenda();
             $totalDenda += $denda;
             
-            // Blokir jika terlambat lebih dari 7 hari
             if ($loan->days_late > 7) {
                 $hasBlocking = true;
                 \Log::info("BLOKIR: User {$userId} terlambat {$loan->days_late} hari untuk buku {$loan->book->judul}");
             }
         }
 
-        // Blokir jika total denda > Rp 50.000
         if ($totalDenda > 50000) {
             $hasBlocking = true;
             \Log::info("BLOKIR: User {$userId} total denda Rp {$totalDenda}");
@@ -112,9 +98,7 @@ class Loan extends Model
         return $hasBlocking;
     }
 
-    /**
-     * TOTAL DENDA TERTUNGGAK USER
-     */
+    
     public static function getTotalDendaTertunggak($userId)
     {
         $loans = self::where('user_id', $userId)
@@ -129,9 +113,7 @@ class Loan extends Model
         return $total;
     }
 
-    /**
-     * JUMLAH BUKU YANG TERLAMBAT
-     */
+  
     public static function getJumlahBukuTerlambat($userId)
     {
         return self::where('user_id', $userId)
@@ -140,17 +122,13 @@ class Loan extends Model
             ->count();
     }
 
-    /**
-     * CEK APAKAH BISA DIPERPANJANG
-     */
+ 
     public function canBeRenewed()
     {
         return !$this->is_late && $this->perpanjangan_ke < 2;
     }
 
-    /**
-     * STATUS DENDA
-     */
+
     public function getStatusDendaAttribute()
     {
         if ($this->denda > 0) {
@@ -159,9 +137,7 @@ class Loan extends Model
         return 'tidak ada';
     }
 
-    /**
-     * ACCESSOR UNTUK FORMATTED DUE DATE
-     */
+
     public function getFormattedDueDateAttribute()
     {
         return $this->tanggal_jatuh_tempo 

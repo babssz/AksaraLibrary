@@ -3,17 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
-        <!-- Tailwind dengan Color Palette Merah Energik -->
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script>
@@ -21,14 +14,14 @@
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1B3C53',      // Navy Blue - warna utama
-                            secondary: '#234C6A',    // Medium Blue - warna sekunder
-                            accent: '#456882',       // Light Blue - aksen
-                            background: '#E3E3E3',   // Light Gray background
-                            danger: '#DC2626',       // Red
-                            success: '#16A34A',      // Green
-                            warning: '#F59E0B',      // Orange
-                            info: '#3B82F6',         // Blue
+                            primary: '#1B3C53',     
+                            secondary: '#234C6A',    
+                            accent: '#456882',       
+                            background: '#E3E3E3',  
+                            danger: '#DC2626',       
+                            success: '#16A34A',     
+                            warning: '#F59E0B',      
+                            info: '#3B82F6',         
                         }
                     }
                 }
@@ -42,8 +35,7 @@
         </style>
     </head>
     <body class="bg-background min-h-screen font-sans text-gray-900 antialiased">
-        <!-- Header -->
-    <header class="bg-primary text-white shadow-lg">
+    <header class="bg-primary text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4">
@@ -78,26 +70,24 @@
                 @endauth
             </div>
         </div>
+        <nav class="bg-secondary text-white shadow-md ">
+            <div class="container mx-auto px-4">
+                <div class="flex space-x-8 py-3">
+                    <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('/') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </a>
+                    <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('books*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
+                        <i class="fas fa-book"></i>
+                        <span>Koleksi Buku</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
     </header>
 
-    <!-- Navigation -->
-    <nav class="bg-secondary text-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex space-x-8 py-3">
-                <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('/') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
-                    <i class="fas fa-home"></i>
-                    <span>Beranda</span>
-                </a>
-                <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('books*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
-                    <i class="fas fa-book"></i>
-                    <span>Koleksi Buku</span>
-                </a>
-            </div>
-        </div>
-    </nav>
 
         <div class="min-h-screen bg-background">
-            <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-primary shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-white">
@@ -106,20 +96,16 @@
                 </header>
             @endif
 
-            <!-- Page Content -->
             <main>
                 @yield('content')
             </main>
         </div>
 
-        <!-- AlpineJS untuk dropdown -->
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-        <!-- Footer -->
 <footer class="bg-primary text-white">
     <div class="container mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <!-- About -->
             <div>
                 <div class="flex items-center space-x-3 mb-4">
                     <div class="bg-white text-primary px-3 py-2 rounded-lg font-bold text-lg shadow-md">
@@ -135,7 +121,6 @@
                 </p>
             </div>
             
-            <!-- Quick Links -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Link Cepat</h4>
                 <ul class="space-y-2 text-sm">
@@ -162,7 +147,6 @@
                 </ul>
             </div>
             
-            <!-- Contact -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Kontak</h4>
                 <ul class="space-y-3 text-sm">
@@ -181,7 +165,6 @@
                 </ul>
             </div>
             
-            <!-- Operating Hours -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Jam Operasional</h4>
                 <ul class="space-y-2 text-sm text-white">
@@ -215,10 +198,8 @@
             </div>
         </div>
         
-        <!-- Bottom Footer -->
         <div class="border-t border-white border-opacity-20 pt-6 text-center text-sm">
             <p class="text-white">&copy; {{ date('Y') }} Perpustakaan Universitas Aksara. All Rights Reserved.</p>
-            <p class="text-gray-300 mt-1">Developed with <i class="fas fa-heart text-yellow-400"></i> by Tim IT Universitas Aksara</p>
         </div>
     </div>
 </footer>

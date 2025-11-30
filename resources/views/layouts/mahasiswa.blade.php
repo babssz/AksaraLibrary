@@ -12,13 +12,13 @@
             theme: {
                 extend: {
                     colors: {
-                            primary: '#1B3C53',      // Navy Blue - warna utama
-                            secondary: '#234C6A',    // Medium Blue - warna sekunder
-                            accent: '#456882',       // Light Blue - aksen
-                            background: '#E3E3E3',   // Light Gray background
-                            danger: '#DC2626',       // Red
-                            success: '#16A34A',      // Green
-                            warning: '#F59E0B',      // Orange
+                            primary: '#1B3C53',      
+                            secondary: '#234C6A',    
+                            accent: '#456882',       
+                            background: '#E3E3E3',   
+                            danger: '#DC2626',       
+                            success: '#16A34A',      
+                            warning: '#F59E0B',      
                             info: '#3B82F6',         
                     }
                 }
@@ -27,8 +27,6 @@
     </script>
 </head>
 <body class="bg-background min-h-screen">
-    <!-- Header -->
-    <!-- Header -->
 <header class="bg-primary text-white shadow-lg sticky top-0 z-50">
     <div class="container mx-auto px-4 py-3">
         <div class="flex justify-between items-center">
@@ -43,7 +41,6 @@
             </div>
             
             <div class="flex items-center space-x-4">
-                <!-- Notification Bell - SAFE VERSION -->
                 @php
                     $unreadCount = 0;
                     try {
@@ -64,7 +61,6 @@
                     @endif
                 </a>
 
-                <!-- User Dropdown untuk Mahasiswa -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center space-x-2 text-white hover:text-yellow-400 transition">
                         <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
@@ -74,7 +70,6 @@
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
 
-                    <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" 
                          class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-200">
                         <div class="px-4 py-2 text-sm text-gray-700 border-b">
@@ -104,7 +99,6 @@
             </div>
         </div>
     </div>
-    <!-- Navigation -->
     <nav class="bg-secondary text-white shadow-md">
     <div class="container mx-auto px-4">
         <div class="flex space-x-8 py-3">
@@ -126,28 +120,27 @@
 </header>
 
 
-    <!-- Main Content -->
+        <main>
+
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                    {{ session('success') }}
+                </div>
+            @endif
+    
+            @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                    {{ session('error') }}
+                </div>
+            @endif
+    
+            @yield('content')
+        </main>
  
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @yield('content')
    
-
-    <!-- Footer -->
 <footer class="bg-primary text-white">
     <div class="container mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <!-- About -->
             <div>
                 <div class="flex items-center space-x-3 mb-4">
                     <div class="bg-white text-primary px-3 py-2 rounded-lg font-bold text-lg shadow-md">
@@ -163,7 +156,6 @@
                 </p>
             </div>
             
-            <!-- Quick Links -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Link Cepat</h4>
                 <ul class="space-y-2 text-sm">
@@ -190,7 +182,6 @@
                 </ul>
             </div>
             
-            <!-- Contact -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Kontak</h4>
                 <ul class="space-y-3 text-sm">
@@ -209,7 +200,6 @@
                 </ul>
             </div>
             
-            <!-- Operating Hours -->
             <div>
                 <h4 class="font-bold text-lg mb-4 text-yellow-400">Jam Operasional</h4>
                 <ul class="space-y-2 text-sm text-white">
@@ -243,10 +233,8 @@
             </div>
         </div>
         
-        <!-- Bottom Footer -->
         <div class="border-t border-white border-opacity-20 pt-6 text-center text-sm">
             <p class="text-white">&copy; {{ date('Y') }} Perpustakaan Universitas Aksara. All Rights Reserved.</p>
-            <p class="text-gray-300 mt-1">Developed with <i class="fas fa-heart text-yellow-400"></i> by Tim IT Universitas Aksara</p>
         </div>
     </div>
 </footer>

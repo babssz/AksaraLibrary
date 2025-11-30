@@ -30,11 +30,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [NotificationController::class, 'clearAll'])->name('notifications.clear-all');
     });
 
-    // BOOKS ROUTES - Semua user bisa lihat buku
+    // BOOKS ROUTES 
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     
-    // REVIEWS ROUTES - Semua user bisa lihat review
+    // REVIEWS ROUTES
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('reviews.show');
 });
@@ -42,11 +42,9 @@ Route::middleware('auth')->group(function () {
 // ROUTE KHUSUS ADMIN
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
-    // Tambahkan route admin lainnya di sini
-
     Route::get('/users/activities', [DashboardController::class, 'allActivities'])->name('admin.users.activities');
     
-    // User Management - Admin only
+    // User Management 
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
@@ -54,7 +52,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     
-    // Books Management - Admin only
+    // Books Management
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
@@ -66,14 +64,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::middleware(['auth', 'mahasiswa'])->prefix('mahasiswa')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('mahasiswa.dashboard');
 
-    // Route yang diblokir jika ada denda
     Route::middleware(['check.denda'])->group(function () {
         Route::post('/books/{book}/loan', [BookController::class, 'loan'])->name('books.loan');
         Route::post('/loans', [LoanController::class, 'store'])->name('loans.store');
         Route::post('/loans/{loan}/renew', [LoanController::class, 'renew'])->name('loans.renew');
     });
     
-    // Route yang tetap bisa diakses meski ada denda
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/loans/history', [LoanController::class, 'history'])->name('loans.history');
 
@@ -87,9 +83,7 @@ Route::middleware(['auth', 'mahasiswa'])->prefix('mahasiswa')->group(function ()
 // ROUTE KHUSUS PEGAWAI
 Route::middleware(['auth', 'pegawai'])->prefix('pegawai')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'pegawai'])->name('pegawai.dashboard');
-    // Tambahkan route pegawai lainnya di sini
 
-    // Loans Management - Pegawai only
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
     Route::get('/loans/create', [LoanController::class, 'create'])->name('loans.create');
     Route::post('/loans', [LoanController::class, 'store'])->name('loans.store');
@@ -97,8 +91,6 @@ Route::middleware(['auth', 'pegawai'])->prefix('pegawai')->group(function () {
     Route::get('/loans/{loan}/edit', [LoanController::class, 'edit'])->name('loans.edit');
     Route::put('/loans/{loan}', [LoanController::class, 'update'])->name('loans.update');
     Route::delete('/loans/{loan}', [LoanController::class, 'destroy'])->name('loans.destroy');
-
-    // ✅ HANYA PEGAWAI YANG BISA PROSES PENGEMBALIAN
     Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
     Route::get('/pegawai/notifications/log', [NotificationController::class, 'systemLog'])->name('pegawai.notifications.log');
 });

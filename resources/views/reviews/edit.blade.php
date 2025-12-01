@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-2xl mx-auto shadow-lg rounded-xl overflow-hidden">
         <div class="bg-white p-6 rounded-lg shadow">
             <h1 class="text-2xl font-bold text-gray-800 mb-2">Edit Review Buku</h1>
             <p class="text-gray-600 mb-6">Edit rating dan ulasan untuk buku: <strong>{{ $review->book->judul }}</strong></p>
@@ -31,7 +31,7 @@
                 <div class="mb-6">
                     <label for="ulasan" class="block text-gray-700 mb-2">Ulasan</label>
                     <textarea name="ulasan" id="ulasan" rows="6" 
-                              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                              class="w-full px-3 py-2 border-2 border-gray-300 rounded focus:outline-none focus:border-"
                               placeholder="Bagikan pengalaman Anda membaca buku ini...">{{ old('ulasan', $review->ulasan) }}</textarea>
                     @error('ulasan')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -40,11 +40,11 @@
     
                 <div class="flex justify-end space-x-3">
                     <a href="{{ route('books.show', $review->book) }}" 
-                       class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded">
+                       class="bg-primary hover:bg-gray-700 transition text-white px-6 py-2 rounded-md shadow-lg">
                         Batal
                     </a>
                     <button type="submit" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+                            class="bg-accent hover:bg-gary-100 transition text-white px-6 py-2 rounded-md shadow-lg">
                         Update Review
                     </button>
                 </div>

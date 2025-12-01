@@ -77,11 +77,8 @@
                                 {{ $loan->status == 'dipinjam' ? 'bg-blue-100 text-blue-800' : 
                                    ($loan->status == 'dikembalikan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800') }}">
                                 @if($loan->status == 'dipinjam')
-                                📖
                                 @elseif($loan->status == 'dikembalikan')
-                                ✅
                                 @else
-                                ⚠️
                                 @endif
                                 {{ $loan->status == 'dipinjam' ? 'Pinjam' : 
                                    ($loan->status == 'dikembalikan' ? 'Kembali' : $loan->status) }}

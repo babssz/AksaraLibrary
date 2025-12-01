@@ -74,11 +74,9 @@
             <div class="container mx-auto px-4">
                 <div class="flex space-x-8 py-3">
                     <a href="{{ url('/') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('/') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
-                        <i class="fas fa-home"></i>
                         <span>Beranda</span>
                     </a>
                     <a href="{{ route('books.index') }}" class="hover:text-yellow-400 transition flex items-center space-x-2 font-semibold {{ request()->is('books*') ? 'text-yellow-400 border-b-2 border-yellow-400' : 'text-white' }}">
-                        <i class="fas fa-book"></i>
                         <span>Koleksi Buku</span>
                     </a>
                 </div>
